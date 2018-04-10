@@ -1,0 +1,9 @@
+version: '3'
+services:
+  build:
+    build: ./
+    entrypoint:
+    - ./build.sh
+    working_dir: /workspace
+    volumes:
+    - ./:/workspace

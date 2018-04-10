@@ -1,20 +1,21 @@
 export VERSION=3.0.0
 
+pi: build_arm64
 all: build
 publish: build build_mac build_linux build_windows
 
 deps:
-	-go get github.com/aliyun/aliyun-openapi-meta
-	go get gopkg.in/ini.v1
-	go get github.com/droundy/goopt
-	go get github.com/alyu/configparser
-	go get github.com/syndtr/goleveldb/leveldb
-	go get github.com/aliyun/aliyun-oss-go-sdk/oss
-	go get -u github.com/jteeuwen/go-bindata/...
-	go get github.com/jmespath/go-jmespath
-	go get github.com/aliyun/alibaba-cloud-sdk-go/sdk
-	go get github.com/posener/complete
-	go get github.com/aliyun/ossutil/lib
+	-go get -v github.com/aliyun/aliyun-openapi-meta
+	go get -v gopkg.in/ini.v1
+	go get -v github.com/droundy/goopt
+	go get -v github.com/alyu/configparser
+	go get -v github.com/syndtr/goleveldb/leveldb
+	go get -v github.com/aliyun/aliyun-oss-go-sdk/oss
+	go get -v -u github.com/jteeuwen/go-bindata/...
+	go get -v github.com/jmespath/go-jmespath
+	go get -v github.com/aliyun/alibaba-cloud-sdk-go/sdk
+	go get -v github.com/posener/complete
+	go get -v github.com/aliyun/ossutil/lib
 
 testdeps:
 	go get -v github.com/onsi/ginkgo/ginkgo
@@ -23,7 +24,7 @@ testdeps:
 	go get gopkg.in/check.v1
 
 metas:
-	go-bindata -o resource/metas.go -pkg resource -prefix ../aliyun-openapi-meta ../aliyun-openapi-meta/**/* ../aliyun-openapi-meta/products.json
+	go-bindata -o resource/metas.go -pkg resource -prefix aliyun-openapi-meta aliyun-openapi-meta/**/* aliyun-openapi-meta/products.json
 
 clean:
 	rm -f resource/metas.go
@@ -51,3 +52,5 @@ build_windows:
 	aliyun oss cp out/aliyun-cli-windows-${VERSION}-amd64.zip oss://aliyun-cli --force --profile oss
 	rm aliyun.exe
 
+build_arm64: build
+	GOOS=linux GOARCH=arm64 go build -o out/aliyun main/main.go

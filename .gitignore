@@ -14,3 +14,4 @@ dist/
 out/
 resource/metas.go
 local-*
+*.tgz
