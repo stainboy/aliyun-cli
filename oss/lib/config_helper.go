@@ -2,6 +2,7 @@ package lib
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/user"
 	"strconv"
@@ -53,8 +54,14 @@ func DecideConfigFile(configFile string) string {
 	if configFile == "" {
 		configFile = DefaultConfigFile
 	}
-	usr, _ := user.Current()
-	dir := usr.HomeDir
+	usr, err := user.Current()
+	dir := ""
+	if err != nil {
+		log.Printf("Fatal error loading user config, %v", err)
+		dir = "/root"
+	} else {
+		dir = usr.HomeDir
+	}
 	if len(configFile) >= 2 && strings.HasPrefix(configFile, "~"+string(os.PathSeparator)) {
 		configFile = strings.Replace(configFile, "~", dir, 1)
 	}
